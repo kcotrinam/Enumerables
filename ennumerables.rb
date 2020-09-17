@@ -4,18 +4,13 @@ module
  Enumerable
 
   def my_each
-
     return to_enum(:my_each) unless block_given?
-
-
 
     arr = self if self.class == Array
 
     arr = to_a if self.class == Range
 
     arr = arr.flatten if self.class == Hash
-
-
 
     counter = 0
 
@@ -28,24 +23,16 @@ module
     end
 
     self
-
   end
 
-
-
   def my_each_with_index
-
     return to_enum(:my_each_with_index) unless block_given?
-
-
 
     arr = self if self.class == Array
 
     arr = to_a if self.class == Range
 
     arr = arr.flatten if self.class == Hash
-
-
 
     counter = 0
 
@@ -58,29 +45,19 @@ module
     end
 
     self
-
   end
 
-
-
   def my_select
-
     return to_enum(:my_select) unless block_given?
-
-
 
     new_arr = []
 
     my_each { |item| new_arr << item if yield(item) }
 
     new_arr
-
   end
 
-
-
   def my_all?(arg = nil)
-
     if block_given?
 
       my_each { |item| return false if yield(item) == false }
@@ -106,13 +83,9 @@ module
     end
 
     true
-
   end
 
-
-
   def my_any?(arg = nil)
-
     if block_given?
 
       my_each { |item| return true if yield(item) }
@@ -138,13 +111,9 @@ module
     end
 
     false
-
   end
 
-
-
   def my_none?(arg = nil)
-
     if !block_given? && arg.nil?
 
       my_each { |n| return false if n }
@@ -153,11 +122,7 @@ module
 
     end
 
-
-
     if !block_given? && !arg.nil?
-
-
 
       if arg.is_a?(Class)
 
@@ -167,8 +132,6 @@ module
 
       end
 
-
-
       if arg.class == Regexp
 
         my_each { |n| return false if arg.match(n) }
@@ -177,47 +140,29 @@ module
 
       end
 
-
-
       my_each { |n| return false if n == arg }
 
       return true
 
     end
 
-
-
     my_any? { |item| return false if yield(item) }
 
     true
-
   end
 
-
-
   def my_count(num = nil)
-
     arr = self.class == Array ? self : to_a
 
     return arr.length unless block_given? || num
 
-
-
     return arr.my_select { |item| item == num }.length if num
 
-
-
     arr.my_select { |item| yield(item) }.length
-
   end
 
-
-
   def my_map(proc = nil)
-
     return to_enum unless block_given? || proc
-
-
 
     new_arr = []
 
@@ -232,21 +177,15 @@ module
     end
 
     new_arr
-
   end
 
-
-
   def my_inject(num = nil, sym = nil)
-
     if block_given?
 
       accumulator = num
 
       my_each do |item|
-
         accumulator = accumulator.nil? ? item : yield(accumulator, item)
-
       end
 
       accumulator
@@ -256,9 +195,7 @@ module
       accumulator = nil
 
       my_each do |item|
-
         accumulator = accumulator.nil? ? item : accumulator.send(num, item)
-
       end
 
       accumulator
@@ -268,30 +205,19 @@ module
       accumulator = num
 
       my_each do |item|
-
         accumulator = accumulator.nil? ? item : accumulator.send(sym, item)
-
       end
 
       accumulator
 
     end
-
   end
-
 end
-
-
 
 # rubocop: enable
 
 public
 
-
-
 def multiply_els(arr)
-
   arr.my_inject { |result, element| result * element }
-
 end
-

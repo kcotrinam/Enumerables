@@ -1,7 +1,7 @@
 AllCops:
   Exclude:
-    - "Guardfile"
-    - "Rakefile"
+    - 'Guardfile'
+    - 'Rakefile'
 
   DisplayCopNames: true
 
@@ -14,7 +14,7 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Max: 150
 Metrics/BlockLength:
-  ExcludedMethods: ["describe"]
+  ExcludedMethods: ['describe']
   Max: 30
 
 Style/Documentation:
@@ -46,4 +46,7 @@ Style/HashEachMethods:
 Style/HashTransformKeys:
   Enabled: false
 Style/HashTransformValues:
+  Enabled: false
+
+Style/CaseEquality:
   Enabled: false
