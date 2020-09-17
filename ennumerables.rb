@@ -42,7 +42,7 @@ module Enumerable
     elsif arg.nil?
       my_each { |n| return false if n.nil? || n == false }
     elsif !arg.nil? && (arg.is_a? Class)
-      my_each { |n| return false if n.class != arg }
+      my_each { |n| return false unless [n.class, n.class.superclass].include?(arg) }
     elsif !arg.nil? && arg.class == Regexp
       my_each { |n| return false unless arg.match(n) }
     else
@@ -58,7 +58,7 @@ module Enumerable
     elsif arg.nil?
       my_each { |n| return true if n }
     elsif !arg.nil? && (arg.is_a? Class)
-      my_each { |n| return true if n.class == arg }
+      my_each { |n| return true if [n.class, n.class.superclass].include?(arg) }
     elsif !arg.nil? && arg.class == Regexp
       my_each { |n| return true if arg.match(n) }
     else
@@ -109,26 +109,17 @@ module Enumerable
     new_arr
   end
 
-  def my_inject(num = nil, sym = nil)
-    if block_given?
-      accumulator = num
-      my_each do |item|
-        accumulator = accumulator.nil? ? item : yield(accumulator, item)
-      end
-      accumulator
-    elsif !num.nil? && (num.is_a?(Symbol) || num.is_a?(String))
-      accumulator = nil
-      my_each do |item|
-        accumulator = accumulator.nil? ? item : accumulator.send(num, item)
-      end
-      accumulator
-    elsif !sym.nil? && (sym.is_a?(Symbol) || sym.is_a?(String))
-      accumulator = num
-      my_each do |item|
-        accumulator = accumulator.nil? ? item : accumulator.send(sym, item)
-      end
-      accumulator
+  def my_inject(initial = nil, sym = nil)
+    if (!initial.nil? && sym.nil?) && (initial.is_a?(Symbol) || initial.is_a?(String))
+      sym = initial
+      initial = nil
     end
+    if !block_given? && !sym.nil?
+      to_a.my_each { |item| initial = initial.nil? ? item : initial.send(sym, item) }
+    else
+      to_a.my_each { |item| initial = initial.nil? ? item : yield(initial, item) }
+    end
+    initial
   end
 end
 
